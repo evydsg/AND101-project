@@ -10,6 +10,8 @@
 # Java class files
 *.class
 
+*.env
+
 # Generated files
 bin/
 gen/
