@@ -23,6 +23,7 @@ class MainActivity : AppCompatActivity() {
     var songImageURL = ""
     var trackName = ""
     var trackURL =""
+    var artist = ""
     val client = AsyncHttpClient()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,9 +34,11 @@ class MainActivity : AppCompatActivity() {
         rvSpot = binding.songItem
         songList = mutableListOf()
         var query = ""
+
+        createAdapter()
     }
 
-    private fun createAdapter(genRange: Pair<Int, Int>){
+    private fun createAdapter(){
         adapter = SpotAdapter(songList)
         rvSpot.adapter = adapter
         rvSpot.layoutManager = StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL)
@@ -46,17 +49,28 @@ class MainActivity : AppCompatActivity() {
 
         client[spotAPIURL, object : JsonHttpResponseHandler() {
             override fun onSuccess(statusCode: Int, headers: Headers, json: JsonHttpResponseHandler.JSON) {
-                songImageURL = ""
+                var trackArray = json.jsonObject.getJSONObject("tracks").getJSONArray("items")
 
-                trackName = json.jsonObject.getString("").replaceFirstChar { it.titlecase() }
-                Log.d("Spotify API", "response successful$json")
-                Log.d("Spotify API track name", trackName)
+                for (i in 0 until trackArray.length()) {
+                    // $.tracks.items[i].album.images[1].url
+                    songImageURL = trackArray.getJSONObject(i).getJSONObject("album").
+                    getJSONArray("images").getJSONObject(1).getString("url")
 
-                trackURL = json.jsonObject.get
-                Log.d("Spotify API ability", trackURL)
+                    // $.tracks.items[i].name
+                    trackName = trackArray.getJSONObject(i).getString("name")
 
-                songList.add(mutableMapOf("image" to songImageURL, "songLink" to trackURL, "songName" to trackName))
-//                Log.d("Spotify API list", songList.toString())
+                    // $.tracks.items[i].album.external_urls.spotify
+                    trackURL = trackArray.getJSONObject(i).getJSONObject("album").getJSONObject("external_urls").
+                    getString("spotify")
+
+                    // $.tracks.items[i].artists[0].name
+                    artist = trackArray.getJSONObject(i).getJSONArray("artists").getJSONObject(i).getString("name")
+
+                    songList.add(mutableMapOf(
+                    "imageURL" to songImageURL, "trackURL" to trackURL, "trackName" to trackName, "artist" to artist)
+                    )
+                    Log.d("Spotify API track name", songList.last().toString())
+                }
 
             }
 
@@ -69,5 +83,5 @@ class MainActivity : AppCompatActivity() {
                 Log.d("Spotify API Error", errorResponse)
             }
         }]
-
+        }
 }
