@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
 
     var songImageURL = ""
     var trackName = ""
-    var trackURL
+    var trackURL =""
     val client = AsyncHttpClient()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,6 +32,7 @@ class MainActivity : AppCompatActivity() {
 
         rvSpot = binding.songItem
         songList = mutableListOf()
+        var query = ""
     }
 
     private fun createAdapter(genRange: Pair<Int, Int>){
@@ -40,16 +41,11 @@ class MainActivity : AppCompatActivity() {
         rvSpot.layoutManager = StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL)
     }
 
-    private fun getPokeDataURL() {
+    private fun getSpotDataURL(query: String) {
         val client = AsyncHttpClient()
-        var baseImageURL = "https://pokeapi.co/api/v2/pokemon/"
+        var spotAPIURL = "https://developer.spotify.com/documentation/web-api/reference/search?$query
 
-        var randInt = Random.nextInt(1,150)
-        var pokeURL = baseImageURL + randInt.toString()
-//        Log.d("Random Int Var", randInt.toString())
-//        Log.d("Random Int Var", pokeURL)
-
-        client[pokeURL, object : JsonHttpResponseHandler() {
+        client[spotAPIURL, object : JsonHttpResponseHandler() {
             override fun onSuccess(statusCode: Int, headers: Headers, json: JsonHttpResponseHandler.JSON) {
                 songImageURL = ""
 
@@ -57,7 +53,6 @@ class MainActivity : AppCompatActivity() {
                 Log.d("Spotify API", "response successful$json")
                 Log.d("Spotify API track name", trackName)
 
-                // get first ability
                 trackURL = json.jsonObject.get
                 Log.d("Spotify API ability", trackURL)
 
