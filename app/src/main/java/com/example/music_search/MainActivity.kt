@@ -42,8 +42,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getSpotDataURL(query: String) {
-        val client = AsyncHttpClient()
-        var spotAPIURL = "https://developer.spotify.com/documentation/web-api/reference/search?$query
+        var spotAPIURL = "https://developer.spotify.com/documentation/web-api/reference/search?$query"
 
         client[spotAPIURL, object : JsonHttpResponseHandler() {
             override fun onSuccess(statusCode: Int, headers: Headers, json: JsonHttpResponseHandler.JSON) {
