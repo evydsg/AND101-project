@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity() {
                 var trackArray = json.jsonObject.getJSONObject("tracks").getJSONArray("items")
 
                 for (i in 0 until trackArray.length()) {
-                    // $.tracks.items[i].album.images[1].url
+                    // $.tracks.items[i].album.images[1].url  images at index 1 are 300x300 index 2 are 64x64
                     songImageURL = trackArray.getJSONObject(i).getJSONObject("album").
                     getJSONArray("images").getJSONObject(1).getString("url")
 
