@@ -45,6 +45,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getSpotDataURL(query: String) {
+        val apiKey = getString(R.string.api_key)
         var spotAPIURL = "https://developer.spotify.com/documentation/web-api/reference/search?$query"
 
         client[spotAPIURL, object : JsonHttpResponseHandler() {

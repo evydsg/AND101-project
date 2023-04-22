@@ -10,7 +10,8 @@
 # Java class files
 *.class
 
-*.env
+*.env*
+.env.xml
 
 # Generated files
 bin/
